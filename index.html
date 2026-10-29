@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0b0d12">
-  <meta name="description" content="Bezplatné online testy počítača, internetu, klávesnice, myši, obrazovky a ďalších zariadení.">
+  <meta name="description" content="Bezplatné online testy počítača, internetu, klávesnice, myši, kamery, obrazovky a ďalších zariadení.">
   <title>PC Test Lab — Testovanie počítača</title>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
@@ -33,6 +33,9 @@
         </a>
         <a href="#mouse" class="nav-link" data-page="mouse">
           <span>↖</span> Test myši
+        </a>
+        <a href="#camera" class="nav-link" data-page="camera">
+          <span>◎</span> Test kamery
         </a>
         <a href="#display" class="nav-link" data-page="display">
           <span>▣</span> Test obrazovky
@@ -102,7 +105,7 @@
               <div class="stat-icon purple">▦</div>
               <div>
                 <span class="stat-label">Dostupné testy</span>
-                <strong class="stat-value">8</strong>
+                <strong class="stat-value">9</strong>
               </div>
             </div>
             <div class="stat-card">
@@ -165,6 +168,20 @@
               <p>Otestuj tlačidlá, pohyb kurzora, koliesko a rýchlosť klikania.</p>
               <div class="card-bottom">
                 <span class="tag">Myš</span>
+                <span class="card-action">Spustiť test →</span>
+              </div>
+            </a>
+
+            <!-- NOVÝ TEST KAMERY -->
+            <a href="#camera" class="test-card" data-page="camera">
+              <div class="card-top">
+                <span class="test-icon cyan">◎</span>
+                <span class="card-arrow">↗</span>
+              </div>
+              <h3>Test kamery</h3>
+              <p>Skontroluj webkameru pomocou živého obrazu a informácií o rozlíšení.</p>
+              <div class="card-bottom">
+                <span class="tag">Kamera</span>
                 <span class="card-action">Spustiť test →</span>
               </div>
             </a>
@@ -388,6 +405,69 @@
               Niektoré prehliadače zobrazujú vlastné kontextové menu alebo
               obmedzujú zachytávanie určitých vstupov. CPS je orientačné
               a závisí od spôsobu merania.
+            </p>
+          </div>
+        </section>
+
+        <!-- KAMERA -->
+        <section class="page" id="page-camera">
+          <div class="page-header">
+            <div class="eyebrow">TEST PERIFÉRIÍ</div>
+            <h1>Test kamery</h1>
+            <p class="page-description">
+              Skontroluj webkameru, živý obraz a dostupné rozlíšenie.
+            </p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Živý obraz z kamery</h2>
+                <p>Povoľ prístup ku kamere, keď sa ťa na to prehliadač opýta.</p>
+              </div>
+              <span class="tag" id="cameraStatus">Vypnutá</span>
+            </div>
+
+            <div class="camera-preview" id="cameraPreview">
+              <video id="cameraVideo" autoplay playsinline muted hidden></video>
+              <div class="camera-placeholder" id="cameraPlaceholder">
+                <span class="camera-placeholder-icon">◎</span>
+                <strong>Kamera je vypnutá</strong>
+                <p>Stlač „Zapnúť kameru“ a povoľ prístup v prehliadači.</p>
+              </div>
+            </div>
+
+            <div class="camera-controls">
+              <label for="cameraSelect" class="field-label">Kamera</label>
+              <select id="cameraSelect" disabled>
+                <option value="">Najprv zapni kameru</option>
+              </select>
+              <div class="button-row">
+                <button class="primary-button" id="startCamera">Zapnúť kameru</button>
+                <button class="secondary-button" id="stopCamera" disabled>Vypnúť kameru</button>
+              </div>
+            </div>
+
+            <div class="camera-stats">
+              <div class="mini-stat">
+                <span>Stav</span>
+                <strong id="cameraState">Neaktívna</strong>
+              </div>
+              <div class="mini-stat">
+                <span>Rozlíšenie</span>
+                <strong id="cameraResolution">—</strong>
+              </div>
+              <div class="mini-stat">
+                <span>Snímková frekvencia</span>
+                <strong id="cameraFrameRate">—</strong>
+              </div>
+            </div>
+
+            <p class="fine-print">
+              Kamera sa spustí iba po tvojom povolení. Obraz sa v tomto teste
+              zobrazuje priamo v prehliadači a neodosiela sa na server.
+              Dostupné údaje závisia od kamery a prehliadača.
+              Stránka musí byť otvorená cez HTTPS alebo localhost.
             </p>
           </div>
         </section>
