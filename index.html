@@ -1,0 +1,601 @@
+
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0d12">
+  <meta name="description" content="Bezplatné online testy počítača, internetu, klávesnice, myši, obrazovky a ďalších zariadení.">
+  <title>PC Test Lab — Testovanie počítača</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="app">
+
+    <aside class="sidebar" id="sidebar">
+      <a href="#home" class="brand">
+        <span class="brand-icon">P</span>
+        <span>PC Test<span class="brand-light"> Lab</span></span>
+      </a>
+
+      <div class="sidebar-label">HLAVNÉ MENU</div>
+
+      <nav class="navigation" aria-label="Hlavná navigácia">
+        <a href="#home" class="nav-link active" data-page="home">
+          <span>⌂</span> Prehľad
+        </a>
+        <a href="#internet" class="nav-link" data-page="internet">
+          <span>◉</span> Internet Speed Test
+        </a>
+        <a href="#keyboard" class="nav-link" data-page="keyboard">
+          <span>⌨</span> Test klávesnice
+        </a>
+        <a href="#mouse" class="nav-link" data-page="mouse">
+          <span>↖</span> Test myši
+        </a>
+        <a href="#display" class="nav-link" data-page="display">
+          <span>▣</span> Test obrazovky
+        </a>
+        <a href="#reaction" class="nav-link" data-page="reaction">
+          <span>ϟ</span> Reakčný čas
+        </a>
+        <a href="#typing" class="nav-link" data-page="typing">
+          <span>✎</span> Rýchlosť písania
+        </a>
+        <a href="#audio" class="nav-link" data-page="audio">
+          <span>♫</span> Test zvuku
+        </a>
+        <a href="#system" class="nav-link" data-page="system">
+          <span>▤</span> Informácie o PC
+        </a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="privacy-card">
+          <span class="privacy-icon">🔒</span>
+          <div>
+            <strong>Testuj bezpečne</strong>
+            <p>Testy prebiehajú v tvojom prehliadači.</p>
+          </div>
+        </div>
+        <div class="sidebar-footer">PC Test Lab · 2026</div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+
+      <header class="topbar">
+        <button class="icon-button menu-toggle" id="menuToggle"
+          aria-label="Otvoriť menu">☰</button>
+
+        <div class="breadcrumb">
+          <span>PC Test Lab</span>
+          <span class="breadcrumb-separator">/</span>
+          <strong id="currentPageTitle">Prehľad</strong>
+        </div>
+
+        <div class="topbar-right">
+          <span class="status-dot"></span>
+          <span class="browser-status">Prehliadač aktívny</span>
+        </div>
+      </header>
+
+      <div class="page-container">
+
+        <!-- PREHĽAD -->
+        <section class="page active" id="page-home">
+          <div class="welcome-section">
+            <div>
+              <div class="eyebrow"><span class="eyebrow-dot"></span> ONLINE DIAGNOSTIKA</div>
+              <h1>Otestuj svoj <span class="gradient-text">počítač.</span></h1>
+              <p class="page-description">
+                Jednoduché nástroje na kontrolu internetu, periférií
+                a ďalších funkcií počítača. Bez inštalácie.
+              </p>
+            </div>
+            <div class="hero-icon" aria-hidden="true">⌘</div>
+          </div>
+
+          <div class="overview-stats">
+            <div class="stat-card">
+              <div class="stat-icon purple">▦</div>
+              <div>
+                <span class="stat-label">Dostupné testy</span>
+                <strong class="stat-value">8</strong>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon green">✓</div>
+              <div>
+                <span class="stat-label">Bez inštalácie</span>
+                <strong class="stat-value">100 % online</strong>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon blue">◈</div>
+              <div>
+                <span class="stat-label">Platforma</span>
+                <strong class="stat-value" id="platformSummary">Prehliadač</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-heading">
+            <div>
+              <h2>Vyber si test</h2>
+              <p>Spusti požadovaný test jedným kliknutím.</p>
+            </div>
+          </div>
+
+          <div class="test-grid">
+
+            <a href="#internet" class="test-card featured-card" data-page="internet">
+              <div class="card-top">
+                <span class="test-icon purple">◉</span>
+                <span class="card-arrow">↗</span>
+              </div>
+              <h3>Internet Speed Test</h3>
+              <p>Zmeraj rýchlosť sťahovania, odosielania a odozvu pripojenia.</p>
+              <div class="card-bottom">
+                <span class="tag">Internet</span>
+                <span class="card-action">Spustiť test →</span>
+              </div>
+            </a>
+
+            <a href="#keyboard" class="test-card" data-page="keyboard">
+              <div class="card-top">
+                <span class="test-icon blue">⌨</span>
+                <span class="card-arrow">↗</span>
+              </div>
+              <h3>Test klávesnice</h3>
+              <p>Skontroluj jednotlivé klávesy a ich reakcie pri stlačení.</p>
+              <div class="card-bottom">
+                <span class="tag">Klávesnica</span>
+                <span class="card-action">Spustiť test →</span>
+              </div>
+            </a>
+
+            <a href="#mouse" class="test-card" data-page="mouse">
+              <div class="card-top">
+                <span class="test-icon green">↖</span>
+                <span class="card-arrow">↗</span>
+              </div>
+              <h3>Test myši</h3>
+              <p>Otestuj tlačidlá, pohyb kurzora, koliesko a rýchlosť klikania.</p>
+              <div class="card-bottom">
+                <span class="tag">Myš</span>
+                <span class="card-action">Spustiť test →</span>
+              </div>
+            </a>
+
+            <a href="#display" class="test-card" data-page="display">
+              <div class="card-top">
+                <span class="test-icon orange">▣</span>
+                <span class="card-arrow">↗</span>
+              </div>
+              <h3>Test obrazovky</h3>
+              <p>Prezri si farebné plochy a hľadaj chybné alebo zaseknuté pixely.</p>
+              <div class="card-bottom">
+                <span class="tag">Monitor</span>
+                <span class="card-action">Spustiť test →</span>
+              </div>
+            </a>
+
+            <a href="#reaction" class="test-card" data-page="reaction">
+              <div class="card-top">
+                <span class="test-icon yellow">ϟ</span>
+                <span class="card-arrow">↗</span>
+              </div>
+              <h3>Reakčný čas</h3>
+              <p>Zisti, ako rýchlo dokážeš reagovať na vizuálny signál.</p>
+              <div class="card-bottom">
+                <span class="tag">Reakcie</span>
+                <span class="card-action">Spustiť test →</span>
+              </div>
+            </a>
+
+            <a href="#typing" class="test-card" data-page="typing">
+              <div class="card-top">
+                <span class="test-icon pink">✎</span>
+                <span class="card-arrow">↗</span>
+              </div>
+              <h3>Rýchlosť písania</h3>
+              <p>Zmeraj počet slov za minútu a presnosť svojho písania.</p>
+              <div class="card-bottom">
+                <span class="tag">Písanie</span>
+                <span class="card-action">Spustiť test →</span>
+              </div>
+            </a>
+
+            <a href="#audio" class="test-card" data-page="audio">
+              <div class="card-top">
+                <span class="test-icon cyan">♫</span>
+                <span class="card-arrow">↗</span>
+              </div>
+              <h3>Test zvuku</h3>
+              <p>Vyskúšaj prehrávanie testovacích tónov cez reproduktory alebo slúchadlá.</p>
+              <div class="card-bottom">
+                <span class="tag">Audio</span>
+                <span class="card-action">Spustiť test →</span>
+              </div>
+            </a>
+
+            <a href="#system" class="test-card" data-page="system">
+              <div class="card-top">
+                <span class="test-icon purple">▤</span>
+                <span class="card-arrow">↗</span>
+              </div>
+              <h3>Informácie o PC</h3>
+              <p>Zobraz dostupné informácie o prehliadači, systéme a obrazovke.</p>
+              <div class="card-bottom">
+                <span class="tag">Systém</span>
+                <span class="card-action">Zobraziť →</span>
+              </div>
+            </a>
+
+          </div>
+
+          <div class="notice-card">
+            <span class="notice-icon">ⓘ</span>
+            <div>
+              <strong>Čo dokáže webová stránka?</strong>
+              <p>
+                Testy využívajú funkcie tvojho prehliadača. Nemajú priamy
+                prístup ku všetkému hardvéru, teplote procesora ani skutočnému
+                stavu jednotlivých komponentov. Výsledky preto ber ako orientačné.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- INTERNET -->
+        <section class="page" id="page-internet">
+          <div class="page-header">
+            <div class="eyebrow">SIEŤ A PRIPOJENIE</div>
+            <h1>Internet Speed Test</h1>
+            <p class="page-description">
+              Zmeraj odozvu a orientačnú rýchlosť internetového pripojenia.
+            </p>
+          </div>
+
+          <div class="panel speed-panel">
+            <div class="speed-gauge" id="speedGauge">
+              <div class="gauge-inner">
+                <span class="gauge-caption" id="speedStatus">PRIPRAVENÝ</span>
+                <strong id="speedValue">—</strong>
+                <span class="gauge-unit" id="speedUnit">Mbps</span>
+              </div>
+            </div>
+
+            <p class="center-text" id="speedMessage">
+              Stlač tlačidlo a spusti meranie.
+            </p>
+            <button class="primary-button" id="startSpeedTest">
+              Spustiť meranie <span>→</span>
+            </button>
+
+            <div class="speed-results">
+              <div class="speed-result">
+                <span class="result-icon purple">↓</span>
+                <span class="result-label">Download</span>
+                <strong id="downloadResult">— <small>Mbps</small></strong>
+              </div>
+              <div class="speed-result">
+                <span class="result-icon blue">↑</span>
+                <span class="result-label">Upload</span>
+                <strong id="uploadResult">— <small>Mbps</small></strong>
+              </div>
+              <div class="speed-result">
+                <span class="result-icon green">◷</span>
+                <span class="result-label">Ping</span>
+                <strong id="pingResult">— <small>ms</small></strong>
+              </div>
+              <div class="speed-result">
+                <span class="result-icon orange">≈</span>
+                <span class="result-label">Jitter</span>
+                <strong id="jitterResult">— <small>ms</small></strong>
+              </div>
+            </div>
+
+            <p class="fine-print">
+              Meranie používa externý testovací server. Výsledky závisia od
+              jeho dostupnosti, zaťaženia a tvojho pripojenia.
+            </p>
+          </div>
+        </section>
+
+        <!-- KLÁVESNICA -->
+        <section class="page" id="page-keyboard">
+          <div class="page-header">
+            <div class="eyebrow">TEST PERIFÉRIÍ</div>
+            <h1>Test klávesnice</h1>
+            <p class="page-description">
+              Stláčaj klávesy a sleduj, ktoré z nich prehliadač zaznamená.
+            </p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Interaktívna klávesnica</h2>
+                <p>Zaznamenané klávesy sa zvýraznia.</p>
+              </div>
+              <button class="secondary-button" id="resetKeyboard">Resetovať</button>
+            </div>
+
+            <div class="keyboard-stats">
+              <div><span>Stlačené klávesy</span><strong id="keyCount">0</strong></div>
+              <div><span>Posledná klávesa</span><strong id="lastKey">—</strong></div>
+              <div><span>Aktuálne stlačené</span><strong id="heldKeys">0</strong></div>
+            </div>
+
+            <div class="keyboard-wrap">
+              <div class="keyboard" id="keyboardVisual" aria-label="Vizuálna klávesnica"></div>
+            </div>
+
+            <p class="fine-print">
+              Kliknutia myšou na obrázok klávesnice sa nepočítajú ako test
+              fyzických klávesov. Niektoré systémové klávesy a kombinácie
+              prehliadač nemusí sprístupniť. Test neoveruje elektrický kontakt
+              ani spoľahlivo nedokáže zistiť každé vynechanie klávesu.
+            </p>
+          </div>
+        </section>
+
+        <!-- MYŠ -->
+        <section class="page" id="page-mouse">
+          <div class="page-header">
+            <div class="eyebrow">TEST PERIFÉRIÍ</div>
+            <h1>Test myši</h1>
+            <p class="page-description">
+              Vyskúšaj tlačidlá, pohyb kurzora a koliesko svojej myši.
+            </p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Testovacia plocha</h2>
+                <p>Pohybuj myšou a klikaj na jej jednotlivé tlačidlá.</p>
+              </div>
+              <button class="secondary-button" id="resetMouse">Resetovať</button>
+            </div>
+
+            <div class="mouse-stats">
+              <div class="mini-stat"><span>Ľavé kliknutia</span><strong id="leftClicks">0</strong></div>
+              <div class="mini-stat"><span>Pravé kliknutia</span><strong id="rightClicks">0</strong></div>
+              <div class="mini-stat"><span>Stredné kliknutia</span><strong id="middleClicks">0</strong></div>
+              <div class="mini-stat"><span>Scroll udalosti</span><strong id="scrollCount">0</strong></div>
+              <div class="mini-stat"><span>CPS</span><strong id="cpsValue">0.0</strong></div>
+              <div class="mini-stat"><span>Pohyb kurzora</span><strong id="mouseMovement">0 px</strong></div>
+            </div>
+
+            <div class="mouse-test-area" id="mouseTestArea" tabindex="0">
+              <div class="mouse-illustration" aria-hidden="true">
+                <div class="mouse-body">
+                  <div class="mouse-left"></div>
+                  <div class="mouse-right"></div>
+                  <div class="mouse-wheel"></div>
+                </div>
+              </div>
+              <strong>Testovacia plocha myši</strong>
+              <p>Skús ľavé, pravé a stredné tlačidlo aj koliesko.</p>
+              <span id="mouseFeedback">Čakám na vstup…</span>
+            </div>
+
+            <p class="fine-print">
+              Niektoré prehliadače zobrazujú vlastné kontextové menu alebo
+              obmedzujú zachytávanie určitých vstupov. CPS je orientačné
+              a závisí od spôsobu merania.
+            </p>
+          </div>
+        </section>
+
+        <!-- OBRAZOVKA -->
+        <section class="page" id="page-display">
+          <div class="page-header">
+            <div class="eyebrow">OBRAZ A FARBY</div>
+            <h1>Test obrazovky</h1>
+            <p class="page-description">
+              Prezri si rôzne farby a skontroluj obrazovku.
+            </p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Farebné testy</h2>
+                <p>Vyber farbu alebo spusti režim celej obrazovky.</p>
+              </div>
+            </div>
+
+            <div class="color-grid">
+              <button class="color-option" data-color="#ffffff" style="--swatch:#ffffff;color:#111">Biela</button>
+              <button class="color-option" data-color="#000000" style="--swatch:#000000">Čierna</button>
+              <button class="color-option" data-color="#ff0000" style="--swatch:#ff0000">Červená</button>
+              <button class="color-option" data-color="#00ff00" style="--swatch:#00ff00;color:#111">Zelená</button>
+              <button class="color-option" data-color="#0000ff" style="--swatch:#0000ff">Modrá</button>
+              <button class="color-option" data-color="#808080" style="--swatch:#808080">Sivá</button>
+            </div>
+
+            <div class="display-preview" id="displayPreview">
+              <span>Vyber farbu vyššie</span>
+            </div>
+
+            <div class="button-row">
+              <button class="primary-button" id="fullscreenDisplay">Celá obrazovka ↗</button>
+              <button class="secondary-button" id="nextDisplayColor">Ďalšia farba →</button>
+              <button class="secondary-button" id="exitDisplay">Ukončiť test</button>
+            </div>
+
+            <p class="fine-print">
+              Pred začiatkom ulož rozpracovanú prácu. Test ti umožní vizuálne
+              hľadať chyby pixelov, ale nedokáže automaticky potvrdiť ich
+              existenciu ani diagnostikovať fyzické poškodenie displeja.
+            </p>
+          </div>
+        </section>
+
+        <!-- REAKČNÝ ČAS -->
+        <section class="page" id="page-reaction">
+          <div class="page-header">
+            <div class="eyebrow">RÝCHLOSŤ REAKCIE</div>
+            <h1>Reakčný čas</h1>
+            <p class="page-description">
+              Klikni hneď, ako sa plocha zmení na zelenú.
+            </p>
+          </div>
+
+          <div class="panel">
+            <div class="reaction-area" id="reactionArea" role="button" tabindex="0">
+              <span class="reaction-symbol" id="reactionSymbol">ϟ</span>
+              <h2 id="reactionTitle">Pripravený?</h2>
+              <p id="reactionMessage">Stlač tlačidlo a počkaj na zelenú.</p>
+            </div>
+
+            <div class="center-actions">
+              <button class="primary-button" id="startReaction">Začať test</button>
+            </div>
+
+            <div class="reaction-result">
+              <span>Posledný výsledok</span>
+              <strong id="reactionResult">— ms</strong>
+              <span>Priemer</span>
+              <strong id="reactionAverage">— ms</strong>
+            </div>
+
+            <p class="fine-print">
+              Výsledok ovplyvňuje monitor, obnovovacia frekvencia, myš,
+              prehliadač aj tvoje reakcie. Nejde o laboratórne meranie.
+            </p>
+          </div>
+        </section>
+
+        <!-- RÝCHLOSŤ PÍSANIA -->
+        <section class="page" id="page-typing">
+          <div class="page-header">
+            <div class="eyebrow">TEST PÍSANIA</div>
+            <h1>Rýchlosť písania</h1>
+            <p class="page-description">
+              Prepíš text a zisti svoju rýchlosť aj presnosť.
+            </p>
+          </div>
+
+          <div class="panel">
+            <div class="typing-stats">
+              <div><span>Čas</span><strong id="typingTime">60 s</strong></div>
+              <div><span>Slová za minútu</span><strong id="typingWpm">0</strong></div>
+              <div><span>Presnosť</span><strong id="typingAccuracy">100 %</strong></div>
+              <div><span>Chyby</span><strong id="typingErrors">0</strong></div>
+            </div>
+
+            <div class="typing-text" id="typingPrompt">
+              Rýchlosť písania závisí od pravidelného tréningu a presnosti.
+              Snaž sa písať plynulo a sústreď sa na každé slovo.
+            </div>
+
+            <label for="typingInput" class="field-label">Tvoj text</label>
+            <textarea id="typingInput" rows="4"
+              placeholder="Klikni sem a začni prepisovať text..."
+              spellcheck="false" autocomplete="off" disabled></textarea>
+
+            <div class="button-row">
+              <button class="primary-button" id="startTyping">Začať test</button>
+              <button class="secondary-button" id="resetTyping">Resetovať</button>
+            </div>
+
+            <p class="fine-print">
+              Počítanie slov a chýb je orientačné. Výsledok závisí od dĺžky
+              textu a spôsobu počítania slov.
+            </p>
+          </div>
+        </section>
+
+        <!-- ZVUK -->
+        <section class="page" id="page-audio">
+          <div class="page-header">
+            <div class="eyebrow">ZVUKOVÉ ZARIADENIA</div>
+            <h1>Test zvuku</h1>
+            <p class="page-description">
+              Prehraj testovací tón a over si, či ho počuješ.
+            </p>
+          </div>
+
+          <div class="panel">
+            <div class="audio-visual">
+              <div class="audio-icon">♫</div>
+              <h2>Testovací tón</h2>
+              <p>Začni s nízkou hlasitosťou.</p>
+            </div>
+
+            <label for="audioFrequency" class="field-label">Frekvencia tónu</label>
+            <div class="audio-controls">
+              <select id="audioFrequency">
+                <option value="220">220 Hz — nízky tón</option>
+                <option value="440" selected>440 Hz — stredný tón</option>
+                <option value="880">880 Hz — vysoký tón</option>
+                <option value="1200">1200 Hz — veľmi vysoký tón</option>
+              </select>
+              <button class="primary-button" id="playAudio">Prehrať tón</button>
+              <button class="secondary-button" id="stopAudio">Zastaviť</button>
+            </div>
+
+            <label for="audioVolume" class="field-label">Hlasitosť testovacieho tónu</label>
+            <input type="range" id="audioVolume" min="0" max="20" value="8">
+            <span class="range-value" id="audioVolumeValue">8 %</span>
+
+            <p class="fine-print">
+              Prehliadač vytvára testovací tón. Tento test neoveruje fyzický
+              stav reproduktorov ani mikrofónu a nemusí fungovať pri zablokovanom zvuku.
+            </p>
+          </div>
+        </section>
+
+        <!-- SYSTÉM -->
+        <section class="page" id="page-system">
+          <div class="page-header">
+            <div class="eyebrow">SYSTÉMOVÉ INFORMÁCIE</div>
+            <h1>Informácie o PC</h1>
+            <p class="page-description">
+              Pozri si údaje, ktoré ti tvoj prehliadač sprístupňuje.
+            </p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Informácie o zariadení</h2>
+                <p>Niektoré hodnoty môžu byť skryté alebo nepresné.</p>
+              </div>
+              <button class="secondary-button" id="refreshSystem">Obnoviť</button>
+            </div>
+
+            <div class="system-info-grid" id="systemInfoGrid"></div>
+
+            <p class="fine-print">
+              Webová stránka nemá automaticky prístup k presnému modelu CPU,
+              teplotám, sériovým číslam, všetkým komponentom ani k presnému
+              množstvu RAM. Uvedené údaje sú len tie, ktoré sprístupňuje prehliadač.
+            </p>
+          </div>
+        </section>
+
+        <footer class="main-footer">
+          <span>© 2026 PC Test Lab</span>
+          <span>Vytvorené pre webový prehliadač</span>
+        </footer>
+
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="display-overlay" id="displayOverlay" hidden>
+    <button id="closeDisplayOverlay" aria-label="Ukončiť celú obrazovku">✕ Ukončiť test</button>
+    <div id="overlayColor"></div>
+  </div>
+
+</body>
+</html>
