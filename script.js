@@ -1,4 +1,3 @@
-
 "use strict";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -28,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
     reaction: "Reakčný čas",
     typing: "Rýchlosť písania",
     audio: "Test zvuku",
+    camera: "Test webkamery",
     system: "Informácie o PC"
   };
 
@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
     sidebar?.classList.remove("open");
 
     if (page === "system") renderSystemInfo();
+    if (page === "camera") refreshCameraDevices();
 
     if (page === "keyboard") {
       window.setTimeout(() => {
@@ -757,6 +758,249 @@ document.addEventListener("DOMContentLoaded", () => {
   $("#playAudio")?.addEventListener("click", playTone);
   $("#stopAudio")?.addEventListener("click", stopTone);
 
+  // TEST WEBKAMERY
+
+  const cameraVideo = $("#cameraVideo");
+  const cameraPlaceholder = $("#cameraPlaceholder");
+  const cameraSelect = $("#cameraSelect");
+  const startCameraButton = $("#startCamera");
+  const stopCameraButton = $("#stopCamera");
+  const cameraStatus = $("#cameraStatus");
+  const cameraResolution = $("#cameraResolution");
+  const cameraFrameRate = $("#cameraFrameRate");
+  const cameraState = $("#cameraState");
+
+  let cameraStream = null;
+  let cameraFpsTimer = null;
+  let cameraLastVideoTime = -1;
+  let cameraFrameCount = 0;
+  let cameraLastFpsTime = 0;
+  let cameraStarting = false;
+
+  function setCameraStatus(message) {
+    if (cameraStatus) cameraStatus.textContent = message;
+  }
+
+  function setCameraState(message) {
+    if (cameraState) cameraState.textContent = message;
+  }
+
+  function stopCamera() {
+    if (cameraFpsTimer !== null) {
+      clearInterval(cameraFpsTimer);
+      cameraFpsTimer = null;
+    }
+
+    if (cameraStream) {
+      cameraStream.getTracks().forEach(track => track.stop());
+      cameraStream = null;
+    }
+
+    if (cameraVideo) {
+      cameraVideo.pause();
+      cameraVideo.srcObject = null;
+      cameraVideo.hidden = true;
+    }
+
+    if (cameraPlaceholder) cameraPlaceholder.hidden = false;
+    if (stopCameraButton) stopCameraButton.disabled = true;
+    if (startCameraButton) {
+      startCameraButton.disabled = false;
+      startCameraButton.textContent = "Spustiť kameru";
+    }
+
+    if (cameraResolution) cameraResolution.textContent = "—";
+    if (cameraFrameRate) cameraFrameRate.textContent = "—";
+    setCameraState("Vypnutá");
+    cameraLastVideoTime = -1;
+    cameraFrameCount = 0;
+    cameraLastFpsTime = 0;
+  }
+
+  async function refreshCameraDevices() {
+    if (!cameraSelect || !navigator.mediaDevices?.enumerateDevices) return;
+
+    const previousDevice = cameraSelect.value;
+
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const cameras = devices.filter(device => device.kind === "videoinput");
+
+      cameraSelect.replaceChildren();
+
+      if (!cameras.length) {
+        const option = document.createElement("option");
+        option.value = "";
+        option.textContent = "Kamera sa nenašla";
+        cameraSelect.appendChild(option);
+        cameraSelect.disabled = true;
+        return;
+      }
+
+      cameras.forEach((device, index) => {
+        const option = document.createElement("option");
+        option.value = device.deviceId;
+        option.textContent = device.label || `Kamera ${index + 1}`;
+        cameraSelect.appendChild(option);
+      });
+
+      cameraSelect.disabled = false;
+
+      if (previousDevice && cameras.some(device => device.deviceId === previousDevice)) {
+        cameraSelect.value = previousDevice;
+      }
+    } catch {
+      setCameraStatus("Zoznam kamier sa nepodarilo načítať. Skontroluj povolenia prehliadača.");
+    }
+  }
+
+  function updateCameraStats() {
+    if (!cameraStream || !cameraVideo) return;
+
+    const track = cameraStream.getVideoTracks()[0];
+    const settings = track?.getSettings?.();
+    const width = cameraVideo.videoWidth || settings?.width;
+    const height = cameraVideo.videoHeight || settings?.height;
+
+    if (cameraResolution) {
+      cameraResolution.textContent = width && height ? `${width} × ${height}` : "Načítavam…";
+    }
+
+    if (cameraFrameRate && settings?.frameRate) {
+      cameraFrameRate.textContent = `${Math.round(settings.frameRate)} FPS`;
+    }
+  }
+
+  function startCameraFpsMonitor() {
+    if (cameraFpsTimer !== null) clearInterval(cameraFpsTimer);
+
+    cameraLastVideoTime = -1;
+    cameraFrameCount = 0;
+    cameraLastFpsTime = performance.now();
+
+    cameraFpsTimer = setInterval(() => {
+      if (!cameraVideo || !cameraStream) return;
+
+      const currentTime = cameraVideo.currentTime;
+      if (currentTime !== cameraLastVideoTime && currentTime > 0) {
+        cameraFrameCount++;
+        cameraLastVideoTime = currentTime;
+      }
+
+      const now = performance.now();
+      const elapsed = now - cameraLastFpsTime;
+
+      if (elapsed >= 1000) {
+        const fps = Math.round(cameraFrameCount * 1000 / elapsed);
+        if (cameraFrameRate) cameraFrameRate.textContent = `${fps} FPS`;
+        cameraFrameCount = 0;
+        cameraLastFpsTime = now;
+      }
+
+      updateCameraStats();
+    }, 250);
+  }
+
+  async function startCamera() {
+    if (cameraStarting || !cameraVideo) return;
+
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setCameraStatus("Tento prehliadač nepodporuje kameru alebo stránka nie je zabezpečená. Otvor ju cez HTTPS.");
+      setCameraState("Nedostupná");
+      notify("Kameru nie je možné spustiť v tomto prehliadači.");
+      return;
+    }
+
+    cameraStarting = true;
+    if (startCameraButton) {
+      startCameraButton.disabled = true;
+      startCameraButton.textContent = "Spúšťam…";
+    }
+    setCameraState("Spúšťanie");
+    setCameraStatus("Prehliadač môže požiadať o povolenie používať kameru.");
+
+    // Pred spustením novej kamery najprv uvoľni predchádzajúce zariadenie.
+    if (cameraStream) stopCamera();
+
+    try {
+      const selectedDeviceId = cameraSelect?.value;
+      const videoConstraints = selectedDeviceId
+        ? { deviceId: { exact: selectedDeviceId } }
+        : true;
+
+      cameraStream = await navigator.mediaDevices.getUserMedia({
+        video: videoConstraints,
+        audio: false
+      });
+
+      cameraVideo.srcObject = cameraStream;
+      cameraVideo.hidden = false;
+      if (cameraPlaceholder) cameraPlaceholder.hidden = true;
+
+      await cameraVideo.play();
+
+      const track = cameraStream.getVideoTracks()[0];
+      track?.addEventListener("ended", () => {
+        if (cameraStream) {
+          stopCamera();
+          setCameraStatus("Kamera bola odpojená alebo zastavená systémom.");
+        }
+      }, { once: true });
+
+      if (startCameraButton) {
+        startCameraButton.disabled = false;
+        startCameraButton.textContent = "Obnoviť kameru";
+      }
+      if (stopCameraButton) stopCameraButton.disabled = false;
+
+      setCameraState("Zapnutá");
+      setCameraStatus("Kamera funguje. Obraz sa spracúva priamo v tvojom prehliadači a neodosiela sa na tento web.");
+      await refreshCameraDevices();
+      updateCameraStats();
+      startCameraFpsMonitor();
+      notify("Webkamera bola spustená.");
+    } catch (error) {
+      stopCamera();
+
+      let message = "Kameru sa nepodarilo spustiť.";
+      if (error?.name === "NotAllowedError" || error?.name === "PermissionDeniedError") {
+        message = "Prístup ku kamere bol zamietnutý. Povoľ kameru v nastaveniach prehliadača.";
+      } else if (error?.name === "NotFoundError" || error?.name === "DevicesNotFoundError") {
+        message = "Nenašla sa žiadna dostupná kamera.";
+      } else if (error?.name === "NotReadableError" || error?.name === "TrackStartError") {
+        message = "Kamera sa nedá použiť. Možno ju používa iná aplikácia.";
+      } else if (error?.name === "OverconstrainedError") {
+        message = "Vybranú kameru sa nepodarilo otvoriť. Skús vybrať inú.";
+      }
+
+      setCameraStatus(message);
+      setCameraState("Chyba");
+      notify(message);
+    } finally {
+      cameraStarting = false;
+      if (!cameraStream && startCameraButton) {
+        startCameraButton.disabled = false;
+        startCameraButton.textContent = "Spustiť kameru";
+      }
+    }
+  }
+
+  startCameraButton?.addEventListener("click", startCamera);
+  stopCameraButton?.addEventListener("click", () => {
+    stopCamera();
+    setCameraStatus("Kamera je vypnutá. Stlač „Spustiť kameru“, keď ju chceš otestovať.");
+    notify("Webkamera bola vypnutá.");
+  });
+
+  cameraSelect?.addEventListener("change", async () => {
+    if (!cameraStream) return;
+    stopCamera();
+    await startCamera();
+  });
+
+  // Zobraz zoznam zariadení pri načítaní stránky.
+  refreshCameraDevices();
+
   // INFORMÁCIE O SYSTÉME
 
   function addSystemItem(label, value) {
@@ -1001,6 +1245,7 @@ document.addEventListener("DOMContentLoaded", () => {
     clearInterval(typingTimer);
     clearInterval(cpsTimer);
     stopTone();
+    stopCamera();
   });
 
   // HOTOVO
